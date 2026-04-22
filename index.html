@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProTimer | SISD </title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --swiss-red: #D52B1E;
@@ -15,7 +16,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: "Google Sans Flex", sans-serif;
             background-color: var(--logo-bg);
             color: #1e293b;
             min-height: 100vh;
@@ -24,7 +25,7 @@
             flex-direction: column;
         }
 
-        .mono { font-family: 'JetBrains Mono', monospace; }
+        .mono { font-family: 'Saira', sans-serif; }
 
         .glass-card {
             background: var(--swiss-white);
@@ -206,7 +207,7 @@
 
         <div class="flex flex-col items-center justify-center mb-12 text-center px-4">
             <div id="global-clock" class="text-7xl md:text-8xl font-black tracking-tighter mono text-slate-900 leading-none">00:00:00</div>
-            <div id="global-date" class="text-[#D52B1E] font-bold tracking-[0.4em] uppercase mt-4 text-xs">Monday, Jan 1</div>
+            <div id="global-date" class="text-[#D52B1E] font-bold tracking-[0.4em] uppercase mt-4 text-base">Monday, Jan 1</div>
             
             <div class="mt-8 flex items-center gap-4">
                 <button id="global-start-btn" class="global-control-btn flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 px-8 py-3 rounded-2xl shadow-lg shadow-emerald-500/20 text-white transition-all">
