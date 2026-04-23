@@ -147,7 +147,6 @@
         }
 
         #landing-page {
-            background: var(--bg-primary);
             position: fixed;
             inset: 0;
             z-index: 200;
@@ -156,11 +155,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            transition: opacity 0.5s ease, visibility 0.5s, background-color 0.3s ease;
-        }
-
-        body.dark-mode #landing-page {
-            background: var(--bg-secondary);
+            transition: opacity 0.5s ease, visibility 0.5s;
         }
 
         body.dark-mode .landing-card h1 {
@@ -330,9 +325,97 @@
         .timer-card:not(.is-finished) .timer-display.is-warning {
             color: #f97316 !important; /* Orange-500 */
         }
+
+        /* Decorative Background Rings */
+        .ring-container {
+            position: fixed;
+            bottom: -20px;
+            left: -20px;
+            opacity: 0.05;
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            isolation: isolate;
+        }
+
+        body.dark-mode .ring-container {
+            opacity: 0.02;
+        }
+
+        .ring-container svg {
+            overflow: visible;
+        }
+
+        .ring {
+            fill: none;
+            stroke-width: 14;
+            mix-blend-mode: multiply;
+            opacity: 0.99;
+        }
+
+        body.dark-mode .ring {
+            mix-blend-mode: normal;
+            stroke: #ffffff;
+        }
+
+        .ring-primary {
+            stroke: #E10031;
+        }
+
+        .ring-grey {
+            stroke: #6b7280;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Decorative Background Rings -->
+    <div class="ring-container">
+        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Top Ring -->
+            <circle class="ring ring-primary" cx="100" cy="-8" r="90" />
+            <!-- Bottom Ring -->
+            <circle class="ring ring-primary" cx="100" cy="208" r="90" />
+            <!-- Left Ring -->
+            <circle class="ring ring-primary" cx="-8" cy="100" r="90" />
+            <!-- Right Ring (Grey) -->
+            <circle class="ring ring-grey" cx="208" cy="100" r="90" />
+        </svg>
+    </div>
+
+    <!-- Global Top-Right Controls -->
+    <div class="fixed top-4 right-4 flex items-center gap-2 z-[300]">
+        <button id="zoom-out-btn" class="p-3 bg-white border border-slate-200 text-slate-600 hover:text-[#D52B1E] hover:border-[#D52B1E] rounded-2xl shadow-sm transition-all" title="Zoom Out">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6"/>
+            </svg>
+        </button>
+        <button id="zoom-in-btn" class="p-3 bg-white border border-slate-200 text-slate-600 hover:text-[#D52B1E] hover:border-[#D52B1E] rounded-2xl shadow-sm transition-all" title="Zoom In">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/>
+            </svg>
+        </button>
+        <button id="fullscreen-btn" class="p-3 bg-white border border-slate-200 text-slate-600 hover:text-[#D52B1E] hover:border-[#D52B1E] rounded-2xl shadow-sm transition-all" title="Enter Fullscreen">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+        </button>
+        <button id="dark-mode-toggle" class="relative inline-flex h-[44px] w-[130px] items-center rounded-[22px] border border-slate-200 bg-white transition-colors duration-300 shadow-sm overflow-hidden flex-shrink-0 cursor-pointer" title="Toggle Dark Mode">
+            <div class="absolute left-[16px] text-slate-400 z-0 text-[10px] font-black uppercase tracking-widest moon-text transition-colors duration-300">Dark</div>
+            <div class="absolute right-[16px] text-slate-600 z-0 text-[10px] font-black uppercase tracking-widest sun-text transition-colors duration-300">Light</div>
+            <span class="thumb transition-transform duration-300 translate-x-1 flex h-[34px] w-[64px] items-center justify-center rounded-[17px] bg-slate-50 shadow-[0_2px_5px_rgba(0,0,0,0.1)] z-10 border border-slate-200">
+                <svg class="sun-icon text-amber-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <svg class="moon-icon text-amber-400 hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </span>
+        </button>
+    </div>
 
     <!-- Landing Page -->
     <div id="landing-page">
@@ -364,42 +447,12 @@
     </div>
 
     <!-- Main Dashboard -->
-    <main id="app-container" class="w-full max-w-[1400px] mx-auto py-6 pb-32 hidden relative">
+    <main id="app-container" class="w-full max-w-[1400px] mx-auto py-6 pb-32 hidden relative z-10">
         <button id="home-btn" class="absolute top-4 left-4 p-3 bg-[#D52B1E] hover:bg-[#b02419] text-white rounded-2xl shadow-md transition-all z-50" title="Back to Home">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
             </svg>
         </button>
-        
-        <div class="absolute top-4 right-4 flex items-center gap-2 z-50">
-            <button id="zoom-out-btn" class="p-3 bg-white border border-slate-200 text-slate-600 hover:text-[#D52B1E] hover:border-[#D52B1E] rounded-2xl shadow-sm transition-all" title="Zoom Out">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6"/>
-                </svg>
-            </button>
-            <button id="zoom-in-btn" class="p-3 bg-white border border-slate-200 text-slate-600 hover:text-[#D52B1E] hover:border-[#D52B1E] rounded-2xl shadow-sm transition-all" title="Zoom In">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/>
-                </svg>
-            </button>
-            <button id="fullscreen-btn" class="p-3 bg-white border border-slate-200 text-slate-600 hover:text-[#D52B1E] hover:border-[#D52B1E] rounded-2xl shadow-sm transition-all" title="Enter Fullscreen">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-                </svg>
-            </button>
-            <button id="dark-mode-toggle" class="relative inline-flex h-[44px] w-[130px] items-center rounded-[22px] border border-slate-200 bg-white transition-colors duration-300 shadow-sm overflow-hidden flex-shrink-0 cursor-pointer" title="Toggle Dark Mode">
-                <div class="absolute left-[16px] text-slate-400 z-0 text-[10px] font-black uppercase tracking-widest moon-text transition-colors duration-300">Dark</div>
-                <div class="absolute right-[16px] text-slate-600 z-0 text-[10px] font-black uppercase tracking-widest sun-text transition-colors duration-300">Light</div>
-                <span class="thumb transition-transform duration-300 translate-x-1 flex h-[34px] w-[64px] items-center justify-center rounded-[17px] bg-slate-50 shadow-[0_2px_5px_rgba(0,0,0,0.1)] z-10 border border-slate-200">
-                    <svg class="sun-icon text-amber-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                    </svg>
-                    <svg class="moon-icon text-amber-400 hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                    </svg>
-                </span>
-            </button>
-        </div>
         
         <div class="flex justify-center mb-8">
             <img src="https://www.nordangliaeducation.com/-/media/sisd-dubai/logos/horizontal-logo.png?rev=1e55495ba7364e8a978dd65e1d644f62.png" 
@@ -428,7 +481,8 @@
         </div>
     </main>
 
-    <footer id="main-footer" class="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-fit mx-auto px-8 py-4 text-center text-slate-400 text-sm border-t border-x border-slate-100 hidden rounded-t-3xl shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+    <!-- Global Footer -->
+    <footer id="main-footer" class="fixed bottom-0 left-1/2 -translate-x-1/2 z-[300] w-fit mx-auto px-8 py-4 text-center text-slate-400 text-sm border-t border-x border-slate-100 rounded-t-3xl shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
         <p class="font-semibold text-slate-500">© 2026 Swiss International Scientific School in Dubai. All rights reserved.</p>
         <p class="text-[10px] font-semibold text-slate-300 mt-1">Dubai Healthcare City, Phase 2, Al Jaddaf, Dubai, PO Box 505002 UAE</p>
     </footer>
@@ -444,13 +498,17 @@
                     <label class="block text-xs font-bold mb-2 text-slate-400 uppercase tracking-widest">Title</label>
                     <input type="text" id="modal-title" class="w-full px-4 py-4 rounded-xl outline-none text-lg border border-slate-200 focus:border-[#D52B1E]">
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-bold mb-2 text-slate-400 uppercase tracking-widest">Minutes</label>
                         <input type="number" id="modal-duration" class="w-full px-4 py-4 rounded-xl outline-none text-lg border border-slate-200 focus:border-[#D52B1E]" min="1">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold mb-2 text-slate-400 uppercase tracking-widest">Auto-Start Time</label>
+                        <label class="block text-xs font-bold mb-2 text-slate-400 uppercase tracking-widest">Extra (%)</label>
+                        <input type="number" id="modal-extra-percentage" class="w-full px-4 py-4 rounded-xl outline-none text-lg border border-slate-200 focus:border-[#D52B1E]" min="0" max="100" value="0">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-2 text-slate-400 uppercase tracking-widest">Auto-Start</label>
                         <input type="time" id="modal-starttime" class="w-full px-4 py-4 rounded-xl outline-none text-lg border border-slate-200 focus:border-[#D52B1E]">
                     </div>
                 </div>
@@ -467,13 +525,13 @@
             <button class="edit-btn absolute top-3 right-3 z-[60] p-2 hover:bg-slate-50 rounded-full transition-all group">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-300 group-hover:text-[#D52B1E]"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
-            <div class="phase-indicator status-dot status-red mt-2"></div>
-            <div class="flex flex-col gap-1">
+            <div class="phase-indicator status-dot status-red mt-2 relative z-10"></div>
+            <div class="flex flex-col gap-1 relative z-10">
                 <h3 class="timer-label text-sm font-black tracking-[0.1em] uppercase text-slate-800">SESSION</h3>
                 <span class="autostart-indicator hidden text-[9px] font-bold uppercase text-[#D52B1E]">@ 00:00</span>
             </div>
-            <div class="timer-display text-6xl font-black mono tracking-tighter leading-none text-slate-900 transition-colors duration-300">25:00</div>
-            <div class="w-full flex flex-col gap-2 py-3 border-y border-slate-50">
+            <div class="timer-display text-6xl font-black mono tracking-tighter leading-none text-slate-900 transition-colors duration-300 relative z-10">25:00</div>
+            <div class="w-full flex flex-col gap-2 py-3 border-y border-slate-50 relative z-10">
                 <div class="flex justify-between items-center px-2">
                     <span class="text-[14px] font-bold text-slate-400 uppercase tracking-widest">30m MARK</span>
                     <span class="mark-30 text-lg mono font-bold text-slate-600">--:--</span>
@@ -483,7 +541,7 @@
                     <span class="mark-5 text-lg mono font-bold text-[#D52B1E]">--:--</span>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 relative z-10">
                 <button class="toggle-btn p-3 bg-[#D52B1E] text-white rounded-xl transition-all shadow-md hover:scale-105" title="Start/Pause">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
                 </button>
@@ -512,9 +570,11 @@
         const dateEl = document.getElementById('global-date');
         const globalStartBtn = document.getElementById('global-start-btn');
         const globalResetBtn = document.getElementById('global-reset-btn');
+        const landingCard = document.querySelector('.landing-card');
         const editModal = document.getElementById('edit-modal');
         const modalTitleInput = document.getElementById('modal-title');
         const modalDurationInput = document.getElementById('modal-duration');
+        const modalExtraPercentageInput = document.getElementById('modal-extra-percentage');
         const modalStartTimeInput = document.getElementById('modal-starttime');
         const modalSave = document.getElementById('modal-save');
         const modalCancel = document.getElementById('modal-cancel');
@@ -564,7 +624,6 @@
             setTimeout(() => {
                 landingPage.classList.add('hidden');
                 appContainer.classList.remove('hidden');
-                mainFooter.classList.remove('hidden');
                 initializeTimers(selectedTimerCount);
             }, 500);
         };
@@ -577,11 +636,11 @@
             });
             timers = [];
             appContainer.classList.add('hidden');
-            mainFooter.classList.add('hidden');
             landingPage.classList.remove('hidden');
             landingPage.style.opacity = '1';
             currentZoom = 100;
             zoomContent.style.zoom = '100%';
+            landingCard.style.zoom = '100%';
         };
 
         function updateGlobalClock() {
@@ -634,8 +693,20 @@
         };
 
         let currentZoom = 100;
-        zoomInBtn.onclick = () => { if (currentZoom < 200) { currentZoom += 10; zoomContent.style.zoom = currentZoom + '%'; } };
-        zoomOutBtn.onclick = () => { if (currentZoom > 50) { currentZoom -= 10; zoomContent.style.zoom = currentZoom + '%'; } };
+        zoomInBtn.onclick = () => { 
+            if (currentZoom < 200) { 
+                currentZoom += 10; 
+                zoomContent.style.zoom = currentZoom + '%'; 
+                landingCard.style.zoom = currentZoom + '%';
+            } 
+        };
+        zoomOutBtn.onclick = () => { 
+            if (currentZoom > 50) { 
+                currentZoom -= 10; 
+                zoomContent.style.zoom = currentZoom + '%'; 
+                landingCard.style.zoom = currentZoom + '%';
+            } 
+        };
 
         function initializeTimers(count) {
             timersList.innerHTML = '';
@@ -647,7 +718,8 @@
                 const config = {
                     id: i + 1,
                     title: labels[i] || `Session ${String.fromCharCode(65 + i)}`,
-                    minutes: defaultMins[i] || 25
+                    minutes: defaultMins[i] || 25,
+                    extraPercentage: 0
                 };
                 timers.push(new Timer(config, timersList));
             }
@@ -660,7 +732,9 @@
             constructor(config, container) {
                 this.id = config.id;
                 this.title = config.title;
-                this.totalSeconds = config.minutes * 60;
+                this.baseMinutes = config.minutes;
+                this.extraPercentage = config.extraPercentage || 0;
+                this.totalSeconds = Math.floor(this.baseMinutes * 60 * (1 + this.extraPercentage / 100));
                 this.timeLeft = this.totalSeconds;
                 this.timerId = null;
                 this.isRunning = false;
@@ -784,14 +858,17 @@
             openEdit() {
                 activeEditingTimer = this;
                 modalTitleInput.value = this.title;
-                modalDurationInput.value = Math.floor(this.totalSeconds / 60);
+                modalDurationInput.value = this.baseMinutes;
+                modalExtraPercentageInput.value = this.extraPercentage;
                 modalStartTimeInput.value = this.scheduledStartTime;
                 editModal.classList.remove('hidden');
             }
 
-            save(newTitle, newMinutes, startTime) {
+            save(newTitle, newMinutes, newExtraPercentage, startTime) {
                 this.title = newTitle;
-                this.totalSeconds = newMinutes * 60;
+                this.baseMinutes = newMinutes;
+                this.extraPercentage = newExtraPercentage;
+                this.totalSeconds = Math.floor(newMinutes * 60 * (1 + newExtraPercentage / 100));
                 this.scheduledStartTime = startTime;
                 this.reset();
             }
@@ -802,8 +879,9 @@
             if (activeEditingTimer) {
                 const t = modalTitleInput.value.trim() || 'Session';
                 const d = parseInt(modalDurationInput.value) || 1;
+                const e = parseInt(modalExtraPercentageInput.value) || 0;
                 const s = modalStartTimeInput.value;
-                activeEditingTimer.save(t, d, s);
+                activeEditingTimer.save(t, d, e, s);
             }
             editModal.classList.add('hidden');
         };
